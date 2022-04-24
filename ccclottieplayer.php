@@ -96,10 +96,6 @@ class plgContentccclottieplayer extends CMSPlugin
 
 				$playerparams = explode('|', $match[1]);
 
-				echo '<pre>';
-				print_r($playerparams);
-				echo '</pre>';
-
 				if (strpos($match[1], 'loop') !== false) {
 					$lottie[$count]['loop'] = 'loop';
 				} else {
