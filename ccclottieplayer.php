@@ -162,7 +162,7 @@ class PlgContentccclottieplayer extends CMSPlugin
 			$file = JUri::root() . $player['src'];
 			$filepath = JPATH_ROOT . '/' . $player['src'];
 
-			if ($file && file_exists($filepath) && pathinfo($filepath, PATHINFO_EXTENSION) === 'json')
+			if ($file && is_file($filepath) && pathinfo($filepath, PATHINFO_EXTENSION) === 'json')
 			{
 				$lottiefile = $file;
 			}
