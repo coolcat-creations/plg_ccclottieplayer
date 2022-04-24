@@ -69,16 +69,14 @@ class plgContentccclottieplayer extends CMSPlugin
 	{
 
 		// Don't run this plugin when the content is being indexed
-		if ($context == 'com_finder.indexer'
-			// Don't run this plugin when we edit an custom module in frontend
-			|| $this->app->input->getCmd('option') == 'com_config'
-			// Don't run this plugin when we edit the content in frontend
-			|| $this->app->input->getCmd('layout') == 'edit') {
+		if ($context === 'com_finder.indexer')
+		{
 			return;
 		}
 
-		// Check if we are in the right component
-		if ($this->app->input->get('option') != 'com_content') {
+		// Simple performance check to determine whether bot should process further
+		if (strpos($article->text, 'lottieplayer') === false)
+		{
 			return;
 		}
 
@@ -116,7 +114,6 @@ class plgContentccclottieplayer extends CMSPlugin
 
 				$lottie[$count]['count'] = $count;
 
-
 				foreach ($playerparams as $playerparam) {
 
 					if (strpos($playerparam, 'path') !== false) {
@@ -138,8 +135,6 @@ class plgContentccclottieplayer extends CMSPlugin
 						$height = explode('=', $playerparam);
 						$lottie[$count]['height'] = $height[1];
 					}
-
-
 
 
 				}
