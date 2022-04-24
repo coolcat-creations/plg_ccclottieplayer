@@ -9,9 +9,6 @@
  */
 
 defined('_JEXEC') or die;
-error_reporting(E_ALL);
-
-// error reporting level maximum
 
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -23,7 +20,7 @@ use Joomla\CMS\Plugin\CMSPlugin;
  * @package   ccclottieplayer
  * @since     1.0.0
  */
-class plgContentccclottieplayer extends CMSPlugin
+class PlgContentccclottieplayer extends CMSPlugin
 {
 	/**
 	 * Application object
@@ -32,11 +29,6 @@ class plgContentccclottieplayer extends CMSPlugin
 	 * @since  1.0.0
 	 */
 	protected $app;
-
-
-	/**
-	 * The regular expression to search for lottieplayer
-	 */
 
 	const LOTTIEPLAYER_REGEX_PATTERN = '#{lottieplayer (.*?)}#s';
 
@@ -65,7 +57,7 @@ class plgContentccclottieplayer extends CMSPlugin
 	 * @since   1.0.0
 	 */
 
-	public function onContentPrepare($context, &$article, &$params, $page = 0)
+	public function onContentPrepare($context, &$article, &$params)
 	{
 
 		// Don't run this plugin when the content is being indexed
@@ -75,49 +67,54 @@ class plgContentccclottieplayer extends CMSPlugin
 		}
 
 		// Simple performance check to determine whether bot should process further
-		if (strpos($article->text, 'lottieplayer') === false)
+		if (str_contains($article->text, 'lottieplayer') === false)
 		{
 			return;
 		}
 
 		// Check if LOTTIEPLAYER_REGEX is contained in $article->text
 
-		if (preg_match_all(self::LOTTIEPLAYER_REGEX_PATTERN, $article->text, $matches, PREG_SET_ORDER)) {
-
+		if (preg_match_all(self::LOTTIEPLAYER_REGEX_PATTERN, $article->text, $matches, PREG_SET_ORDER))
+		{
 			echo HTMLHelper::_('script', 'plg_content_ccclottieplayer/lottie-player.js', array('version' => 'auto', 'relative' => true));
 
 			$lottie = [];
 			$count = 1;
 
-			foreach ($matches as $match) {
-
+			foreach ($matches as $match)
+			{
 				$playerparams = explode('|', $match[1]);
 
-				$lottie[$count]['loop'] = strpos($match[1], 'loop') !== false ? 'loop' : false;
-				$lottie[$count]['autoplay'] = strpos($match[1], 'autoplay') !== false ? 'autoplay' : false;
-				$lottie[$count]['controls'] = strpos($match[1], 'controls') !== false ? 'controls' : false;
-				$lottie[$count]['hover'] = strpos($match[1], 'hover') !== false ? 'preload' : false;
-				$lottie[$count]['bounce'] = strpos($match[1], 'bounce') !== false ? 'bounce' : false;
+				$lottie[$count]['loop'] = str_contains($match[1], 'loop') !== false ? 'loop' : false;
+				$lottie[$count]['autoplay'] = str_contains($match[1], 'autoplay') !== false ? 'autoplay' : false;
+				$lottie[$count]['controls'] = str_contains($match[1], 'controls') !== false ? 'controls' : false;
+				$lottie[$count]['hover'] = str_contains($match[1], 'hover') !== false ? 'preload' : false;
+				$lottie[$count]['bounce'] = str_contains($match[1], 'bounce') !== false ? 'bounce' : false;
 				$lottie[$count]['count'] = $count;
 
-				foreach ($playerparams as $playerparam) {
+				foreach ($playerparams as $playerparam)
+				{
 
-					if (strpos($playerparam, 'src') !== false) {
+					if (str_contains($playerparam, 'src') !== false)
+					{
 						$src = explode('=', $playerparam);
 						$lottie[$count]['src'] = $src[1];
 					}
 
-					if (strpos($playerparam, 'background') !== false) {
+					if (str_contains($playerparam, 'background') !== false)
+					{
 						$background = explode('=', $playerparam);
 						$lottie[$count]['background'] = $background[1];
 					}
 
-					if (strpos($playerparam, 'width') !== false) {
+					if (str_contains($playerparam, 'width') !== false)
+					{
 						$width = explode('=', $playerparam);
 						$lottie[$count]['width'] = $width[1];
 					}
 
-					if (strpos($playerparam, 'height') !== false) {
+					if (str_contains($playerparam, 'height') !== false)
+					{
 						$height = explode('=', $playerparam);
 						$lottie[$count]['height'] = $height[1];
 					}
@@ -130,7 +127,8 @@ class plgContentccclottieplayer extends CMSPlugin
 
 				$lottieplayer = [];
 
-				foreach ($lottie as $player) {
+				foreach ($lottie as $player)
+				{
 					$lottieplayer = $this->getLottiePlayer($player);
 				}
 
@@ -147,28 +145,31 @@ class plgContentccclottieplayer extends CMSPlugin
 	/**
 	 *
 	 *
-	 * @param array $match The match array
+	 * @param   array  $player The match array
 	 *
-	 * @return  string
+	 * @return  string $lottieplayer The replace code
 	 *
 	 * @since   1.0.0
 	 */
 
-	protected function getLottieplayer($player)
+	protected function getLottieplayer(array $player) : string
 	{
 
+		$lottiefile = false;
 
-		if ($player['src']) {
-			// check if the file exists in on this domain
-
+		if ($player['src'])
+		{
 			$file = JUri::root() . $player['src'];
 			$filepath = JPATH_ROOT . '/' . $player['src'];
 
-			// if file exists in Joomla
-			if (JFile::exists($filepath)) {
+			if ($file && file_exists($filepath) && pathinfo($filepath, PATHINFO_EXTENSION) === 'json')
+			{
 				$lottiefile = $file;
-			} else {
-				return;
+			}
+
+			else
+			{
+				return false;
 			}
 		}
 
@@ -186,21 +187,32 @@ class plgContentccclottieplayer extends CMSPlugin
 
 
 		$style = "";
+		$width = "";
+		$height = "";
 
-		if ($player['width']) {
+		if ($player['width'])
+		{
 			$width = "width:" . $player['width'] . '; ';
 		}
 
-		if ($player['height']) {
+		if ($player['height'])
+		{
 			$height = "height:" . $player['height'] . '; ';
 		}
 
-		if ($player['width'] || $player['height']) {
+		if ($player['width'] || $player['height'])
+		{
 			$style = 'style="' . $width . ' ' . $height . '"';
 		}
 
 
-		$lottieplayer = '<lottie-player id="lottie-' . $count . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . ' ' . $autoplay . ' ' .$controls . ' ' . $hover . ' ' . $bounce . ' ' .$style . ' background="' . $player['background'] . '"></lottie-player>';
+		$lottieplayer = '<lottie-player id="lottie-' . $count . '" 
+										class="lottieplayer" 
+										src="' . $lottiefile . '" 
+										' . $loop . ' ' . $autoplay . ' ' . $controls . ' ' . $hover . ' ' . $bounce . ' ' . $style . ' 
+										background="' . $player['background'] . '">
+										
+						</lottie-player>';
 
 		return $lottieplayer;
 
