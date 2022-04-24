@@ -100,6 +100,27 @@ class plgContentccclottieplayer extends CMSPlugin
 				print_r($playerparams);
 				echo '</pre>';
 
+				if (strpos($match[1], 'loop') !== false) {
+					$lottie[$count]['loop'] = 'loop';
+				} else {
+					$lottie[$count]['loop'] = false;
+				}
+
+				if (strpos($match[1], 'autoplay') !== false) {
+					$lottie[$count]['autoplay'] = 'autoplay';
+				} else {
+					$lottie[$count]['autoplay'] = false;
+				}
+
+				if (strpos($match[1], 'controls') !== false) {
+					$lottie[$count]['controls'] = 'controls';
+				} else {
+					$lottie[$count]['controls'] = false;
+				}
+
+				$lottie[$count]['count'] = $count;
+
+
 				foreach ($playerparams as $playerparam) {
 
 					if (strpos($playerparam, 'path') !== false) {
@@ -122,26 +143,7 @@ class plgContentccclottieplayer extends CMSPlugin
 						$lottie[$count]['height'] = $height[1];
 					}
 
-					if (strpos($playerparam, 'loop') !== false) {
-						$lottie[$count]['loop'] = 'loop';
-					} else {
-						$lottie[$count]['loop'] = false;
-					}
 
-
-					if (strpos($playerparam, 'autoplay') !== false) {
-						$lottie[$count]['autoplay'] = 'autoplay';
-					} else {
-						$lottie[$count]['autoplay'] = false;
-					}
-
-					if (strpos($playerparam, 'controls') !== false) {
-						$lottie[$count]['controls'] = 'controls';
-					} else {
-						$lottie[$count]['controls'] = false;
-					}
-
-					$lottie[$count]['count'] = $count;
 
 
 				}
@@ -228,7 +230,7 @@ class plgContentccclottieplayer extends CMSPlugin
 		}
 
 
-		$lottieplayer = '<lottie-player id="lottie-' . $player['count'] . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . $autoplay . $controls . $style . '" background="' . $player['background'] . '"></lottie-player>';
+		$lottieplayer = '<lottie-player id="lottie-' . $player['count'] . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . ' ' . $autoplay . ' ' .$controls . ' ' .$style . ' background="' . $player['background'] . '"></lottie-player>';
 
 		return $lottieplayer;
 
