@@ -117,13 +117,20 @@ class plgContentccclottieplayer extends CMSPlugin
 					$lottie[$count]['hover'] = false;
 				}
 
+				if (strpos($match[1], 'bounce') !== false) {
+					$lottie[$count]['bounce'] = 'bounce';
+				} else {
+					$lottie[$count]['bounce'] = false;
+				}
+
+
 				$lottie[$count]['count'] = $count;
 
 				foreach ($playerparams as $playerparam) {
 
-					if (strpos($playerparam, 'path') !== false) {
-						$path = explode('=', $playerparam);
-						$lottie[$count]['path'] = $path[1];
+					if (strpos($playerparam, 'src') !== false) {
+						$src = explode('=', $playerparam);
+						$lottie[$count]['src'] = $src[1];
 					}
 
 					if (strpos($playerparam, 'background') !== false) {
@@ -177,11 +184,11 @@ class plgContentccclottieplayer extends CMSPlugin
 	{
 
 
-		if ($player['path']) {
+		if ($player['src']) {
 			// check if the file exists in on this domain
 
-			$file = JUri::root() . $player['path'];
-			$filepath = JPATH_ROOT . '/' . $player['path'];
+			$file = JUri::root() . $player['src'];
+			$filepath = JPATH_ROOT . '/' . $player['src'];
 
 			// if file exists in Joomla
 			if (JFile::exists($filepath)) {
@@ -195,6 +202,12 @@ class plgContentccclottieplayer extends CMSPlugin
 			$controls = 'controls';
 		} else {
 			$controls = '';
+		}
+
+		if ($player['bounce'] == 'bounce') {
+			$bounce = 'mode="bounce"';
+		} else {
+			$bounce = '';
 		}
 
 		if ($player['loop'] == 'loop') {
@@ -234,7 +247,7 @@ class plgContentccclottieplayer extends CMSPlugin
 		}
 
 
-		$lottieplayer = '<lottie-player id="lottie-' . $player['count'] . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . ' ' . $autoplay . ' ' .$controls . ' ' . $hover . ' ' .$style . ' background="' . $player['background'] . '"></lottie-player>';
+		$lottieplayer = '<lottie-player id="lottie-' . $count . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . ' ' . $autoplay . ' ' .$controls . ' ' . $hover . ' ' . $bounce . ' ' .$style . ' background="' . $player['background'] . '"></lottie-player>';
 
 		return $lottieplayer;
 
