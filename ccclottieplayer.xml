@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="3.8" group="content" method="upgrade">
+	<name>PLG_CONTENT_PLG_CCCLOTTIEPLAYER</name>
+	<creationDate>24.04.22</creationDate>
+	<author>Elisa Foltyn</author>
+	<authorEmail>mail@coolcat-creations.com</authorEmail>
+	<authorUrl>https://coolcat-creations.com</authorUrl>
+	<copyright>coolcat-creation.com</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>1.0</version>
+	<description>PLG_CONTENT_PLG_CCCLOTTIEPLAYER_XML_DESCRIPTION</description>
+
+	<!-- Scripts to run on installation -->
+	<scriptfile></scriptfile>
+
+	<!-- Language files -->
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_content_plg_ccclottieplayer.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_content_plg_ccclottieplayer.sys.ini</language>
+	</languages>
+
+	<!-- Plugin files -->
+	<files>
+		<filename plugin="ccclottieplayer">ccclottieplayer.php</filename>
+		<folder>language</folder>
+		<folder>js</folder>
+	</files>
+
+	<!-- Config parameter -->
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="sample"
+					type="text"
+					default="42"
+					label="PLG_SYSTEM_PLG_CCCLOTTIEPLAYER_SAMPLE_LABEL"
+					description="PLG_SYSTEM_PLG_CCCLOTTIEPLAYER_SAMPLE_DESCRIPTION"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+
+	<!-- Update servers -->
+	<updateservers>
+		<server type="extension" priority="1" name="ccclottieplayer">https://www.example.com/ccclottieplayer.xml</server>
+	</updateservers>
+</extension>
