@@ -93,37 +93,11 @@ class plgContentccclottieplayer extends CMSPlugin
 
 				$playerparams = explode('|', $match[1]);
 
-				if (strpos($match[1], 'loop') !== false) {
-					$lottie[$count]['loop'] = 'loop';
-				} else {
-					$lottie[$count]['loop'] = false;
-				}
-
-				if (strpos($match[1], 'autoplay') !== false) {
-					$lottie[$count]['autoplay'] = 'autoplay';
-				} else {
-					$lottie[$count]['autoplay'] = false;
-				}
-
-				if (strpos($match[1], 'controls') !== false) {
-					$lottie[$count]['controls'] = 'controls';
-				} else {
-					$lottie[$count]['controls'] = false;
-				}
-
-				if (strpos($match[1], 'hover') !== false) {
-					$lottie[$count]['hover'] = 'hover';
-				} else {
-					$lottie[$count]['hover'] = false;
-				}
-
-				if (strpos($match[1], 'bounce') !== false) {
-					$lottie[$count]['bounce'] = 'bounce';
-				} else {
-					$lottie[$count]['bounce'] = false;
-				}
-
-
+				$lottie[$count]['loop'] = strpos($match[1], 'loop') !== false ? 'loop' : false;
+				$lottie[$count]['autoplay'] = strpos($match[1], 'autoplay') !== false ? 'autoplay' : false;
+				$lottie[$count]['controls'] = strpos($match[1], 'controls') !== false ? 'controls' : false;
+				$lottie[$count]['hover'] = strpos($match[1], 'hover') !== false ? 'preload' : false;
+				$lottie[$count]['bounce'] = strpos($match[1], 'bounce') !== false ? 'bounce' : false;
 				$lottie[$count]['count'] = $count;
 
 				foreach ($playerparams as $playerparam) {
@@ -198,11 +172,11 @@ class plgContentccclottieplayer extends CMSPlugin
 			}
 		}
 
-		if ($player['controls'] == 'controls') {
-			$controls = 'controls';
-		} else {
-			$controls = '';
-		}
+		$controls = $player['controls'];
+		$autoplay = $player['autoplay'];
+		$loop = $player['loop'];
+		$hover = $player['hover'];
+		$count = $player['count'];
 
 		if ($player['bounce'] == 'bounce') {
 			$bounce = 'mode="bounce"';
@@ -210,27 +184,6 @@ class plgContentccclottieplayer extends CMSPlugin
 			$bounce = '';
 		}
 
-		if ($player['loop'] == 'loop') {
-			$loop = 'loop';
-		} else {
-			$loop = '';
-		}
-
-		if ($player['hover'] == 'hover') {
-			$hover = 'hover';
-		} else {
-			$hover = '';
-		}
-
-		if ($player['autoplay'] == 'autoplay') {
-			$autoplay = 'autoplay';
-		} else {
-			$autoplay = '';
-		}
-
-		if ($player['count']) {
-			$count = $player['count'];
-		}
 
 		$style = "";
 
