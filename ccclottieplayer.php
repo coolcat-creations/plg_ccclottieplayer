@@ -86,7 +86,6 @@ class plgContentccclottieplayer extends CMSPlugin
 
 			echo HTMLHelper::_('script', 'plg_content_ccclottieplayer/lottie-player.js', array('version' => 'auto', 'relative' => true));
 
-
 			$lottie = [];
 			$count = 1;
 
@@ -110,6 +109,12 @@ class plgContentccclottieplayer extends CMSPlugin
 					$lottie[$count]['controls'] = 'controls';
 				} else {
 					$lottie[$count]['controls'] = false;
+				}
+
+				if (strpos($match[1], 'hover') !== false) {
+					$lottie[$count]['hover'] = 'hover';
+				} else {
+					$lottie[$count]['hover'] = false;
 				}
 
 				$lottie[$count]['count'] = $count;
@@ -191,11 +196,19 @@ class plgContentccclottieplayer extends CMSPlugin
 		} else {
 			$controls = '';
 		}
+
 		if ($player['loop'] == 'loop') {
 			$loop = 'loop';
 		} else {
 			$loop = '';
 		}
+
+		if ($player['hover'] == 'hover') {
+			$hover = 'hover';
+		} else {
+			$hover = '';
+		}
+
 		if ($player['autoplay'] == 'autoplay') {
 			$autoplay = 'autoplay';
 		} else {
@@ -221,7 +234,7 @@ class plgContentccclottieplayer extends CMSPlugin
 		}
 
 
-		$lottieplayer = '<lottie-player id="lottie-' . $player['count'] . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . ' ' . $autoplay . ' ' .$controls . ' ' .$style . ' background="' . $player['background'] . '"></lottie-player>';
+		$lottieplayer = '<lottie-player id="lottie-' . $player['count'] . '" class="lottieplayer" src="' . $lottiefile . '" ' . $loop . ' ' . $autoplay . ' ' .$controls . ' ' . $hover . ' ' .$style . ' background="' . $player['background'] . '"></lottie-player>';
 
 		return $lottieplayer;
 
